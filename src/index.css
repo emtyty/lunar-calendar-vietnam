@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter", sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-paper: #ffffff;
+  --color-ink: #242424;
+  --color-accent: #0078d4; /* Microsoft Outlook Blue */
+  --color-olive: #616161;
+  --color-border: #edebe9;
+  --color-hover: #f3f2f1;
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  html {
+    font-size: 18px; /* Reverting to previous size or keeping it readable */
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+    }
+    html, body, #root {
+      overflow: auto; /* Allow scrolling on mobile if content overflows */
+      height: auto;
+      min-height: 100%;
+    }
+  }
+  
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display font-semibold;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 40px repeat(7, 1fr);
+  @apply bg-border gap-px border-t border-border;
+}
+
+.week-cell {
+  @apply bg-slate-50 flex items-center justify-center text-[10px] font-bold text-olive/40 border-r border-border uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.day-cell {
+  @apply bg-white flex flex-col items-center justify-center relative transition-all duration-75 cursor-pointer;
+}
+
+.day-cell:hover {
+  @apply bg-hover z-10;
+}
+
+.day-cell.active {
+  @apply bg-accent/5 ring-1 ring-accent ring-inset z-20;
+}
+
+.day-cell.active span:first-child {
+  @apply text-accent font-bold;
+}
+
+.day-cell.today {
+  @apply relative;
+}
+
+.day-cell.today span:first-child {
+  @apply bg-accent text-white rounded-full w-8 h-8 flex items-center justify-center;
+}
+
+.day-cell.today.active span:first-child {
+  @apply bg-accent text-white;
+}
+
+.day-cell.other-month {
+  @apply opacity-30;
+}
