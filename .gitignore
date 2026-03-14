@@ -6,9 +6,8 @@ dist/
 build/
 coverage/
 
-# Environment variables — never commit real secrets
+# Environment variables — never commit
 .env*
-!.env.example
 
 # Vite cache
 .vite/
