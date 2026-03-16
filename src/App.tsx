@@ -8,6 +8,7 @@ import { CHI_NAMES } from './constants/calendar';
 import { useClock } from './hooks/useClock';
 import { useNotes } from './hooks/useNotes';
 import { useLunarEvents } from './hooks/useLunarEvents';
+import { useLunarPresets } from './hooks/useLunarPresets';
 import { getLunarInfo, getHoliday, findBestDates } from './services/lunarService';
 import { NavSidebar, NavTab } from './components/NavSidebar';
 import { TodayView } from './components/views/TodayView';
@@ -44,6 +45,7 @@ export default function App() {
   const { notes, selectedDateNotes, newNoteContent, setNewNoteContent, addNote, deleteNote } =
     useNotes(selectedDate);
   const { events: lunarEvents, addEvent, deleteEvent, updateEvent } = useLunarEvents();
+  const { enabled: enabledPresets, toggle: togglePreset, expandedPresets } = useLunarPresets();
 
   // -------------------------------------------------------------------------
   // Derived data
@@ -209,9 +211,12 @@ export default function App() {
       {isLunarEventModalOpen && (
         <LunarEventModal
           events={lunarEvents}
+          enabledPresets={enabledPresets}
+          expandedPresets={expandedPresets}
           onAddEvent={addEvent}
           onDeleteEvent={deleteEvent}
           onUpdateEvent={updateEvent}
+          onTogglePreset={togglePreset}
           onClose={() => setIsLunarEventModalOpen(false)}
         />
       )}

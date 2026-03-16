@@ -3,18 +3,31 @@ import { Calendar, X, Plus, Pencil, Trash2, Download, AlertTriangle, CheckCircle
 import { cn } from '../../lib/utils';
 import { LunarEvent } from '../../types';
 import { generateAndDownloadICS, ExportSummary } from '../../services/icsService';
+import { PresetId, PRESET_DEFINITIONS } from '../../constants/presets';
 
 interface Props {
   events: LunarEvent[];
+  enabledPresets: Set<PresetId>;
+  expandedPresets: LunarEvent[];
   onAddEvent:    (draft: Omit<LunarEvent, 'id' | 'createdAt'>) => void;
   onDeleteEvent: (id: string) => void;
   onUpdateEvent: (id: string, patch: Partial<Omit<LunarEvent, 'id' | 'createdAt'>>) => void;
+  onTogglePreset: (id: PresetId) => void;
   onClose: () => void;
 }
 
 const EMPTY_FORM = { title: '', lunarDay: 1, lunarMonth: 1, isLeapMonth: false };
 
-export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEvent, onClose }: Props) {
+export function LunarEventModal({
+  events,
+  enabledPresets,
+  expandedPresets,
+  onAddEvent,
+  onDeleteEvent,
+  onUpdateEvent,
+  onTogglePreset,
+  onClose,
+}: Props) {
   const [form, setForm]           = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm]   = useState(false);
@@ -23,6 +36,9 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
 
   const startYear = new Date().getFullYear();
   const endYear   = startYear + yearCount - 1;
+
+  const allExportEvents = [...expandedPresets, ...events];
+  const totalItems      = yearCount * allExportEvents.length;
 
   // ---------------------------------------------------------------------------
   // Form handlers
@@ -67,12 +83,17 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
     setExportResult(null);
   }
 
+  function handleTogglePreset(id: PresetId) {
+    onTogglePreset(id);
+    setExportResult(null);
+  }
+
   // ---------------------------------------------------------------------------
   // Export handler
   // ---------------------------------------------------------------------------
 
   function handleExport() {
-    const result = generateAndDownloadICS(events, startYear, yearCount);
+    const result = generateAndDownloadICS(allExportEvents, startYear, yearCount);
     setExportResult(result);
   }
 
@@ -97,11 +118,49 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
 
-          {/* ── Section 1: Event list ── */}
+          {/* ── Section 1: Preset events ── */}
+          <div className="flex flex-col gap-3">
+            <span className="text-[11px] uppercase font-bold text-olive/60 tracking-wider">
+              Sự kiện lặp lại có sẵn
+            </span>
+            <div className="grid grid-cols-2 gap-2">
+              {PRESET_DEFINITIONS.map(preset => {
+                const active = enabledPresets.has(preset.id);
+                return (
+                  <button
+                    key={preset.id}
+                    onClick={() => handleTogglePreset(preset.id)}
+                    className={cn(
+                      'flex items-start gap-3 p-3 rounded-xl border text-left transition-all',
+                      active
+                        ? 'border-accent bg-accent/5 ring-1 ring-accent/30'
+                        : 'border-border bg-slate-50/50 hover:border-accent/40',
+                    )}
+                  >
+                    <span className="text-2xl shrink-0 leading-none mt-0.5">{preset.emoji}</span>
+                    <div className="min-w-0">
+                      <div className={cn('text-sm font-bold truncate', active ? 'text-accent' : 'text-ink')}>
+                        {preset.label}
+                      </div>
+                      <div className="text-[10px] text-olive/60 mt-0.5">{preset.description}</div>
+                      <div className={cn(
+                        'mt-1 text-[10px] font-semibold',
+                        active ? 'text-accent' : 'text-olive/40',
+                      )}>
+                        {active ? `✓ Đã bật · ${preset.events.length} sự kiện/năm` : `${preset.events.length} sự kiện/năm`}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Section 2: Custom event list ── */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="text-[11px] uppercase font-bold text-olive/60 tracking-wider">
-                Sự kiện đã lưu ({events.length})
+                Sự kiện riêng ({events.length})
               </span>
               {!showForm && (
                 <button
@@ -115,7 +174,7 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
 
             {events.length === 0 && !showForm ? (
               <div className="p-6 text-center text-olive/50 italic text-sm border border-dashed border-border rounded-xl">
-                Chưa có sự kiện nào. Nhấn "Thêm mới" để bắt đầu.
+                Chưa có sự kiện riêng. Nhấn "Thêm mới" để thêm giỗ, sinh nhật...
               </div>
             ) : (
               <div className="flex flex-col gap-2">
@@ -162,14 +221,13 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
             )}
           </div>
 
-          {/* ── Section 2: Add / Edit form ── */}
+          {/* ── Section 3: Add / Edit form ── */}
           {showForm && (
             <div className="flex flex-col gap-4 p-4 rounded-xl border border-accent/30 bg-accent/5">
               <div className="text-[11px] uppercase font-bold text-accent/80 tracking-wider">
                 {editingId ? 'Chỉnh sửa sự kiện' : 'Thêm sự kiện mới'}
               </div>
 
-              {/* Title */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-bold text-olive/70 uppercase">Tên sự kiện</label>
                 <input
@@ -183,7 +241,6 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
                 />
               </div>
 
-              {/* Lunar date */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-bold text-olive/70 uppercase">Ngày âm lịch</label>
                 <div className="flex items-center gap-2">
@@ -212,8 +269,6 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
                     </select>
                   </div>
                 </div>
-
-                {/* Leap month toggle */}
                 <label className="flex items-center gap-2 cursor-pointer mt-1 w-fit">
                   <input
                     type="checkbox"
@@ -226,7 +281,6 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
                 </label>
               </div>
 
-              {/* Form actions */}
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={handleCancel}
@@ -245,8 +299,8 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
             </div>
           )}
 
-          {/* ── Section 3: Export settings ── */}
-          {events.length > 0 && (
+          {/* ── Section 4: Export settings ── */}
+          {allExportEvents.length > 0 && (
             <div className="flex flex-col gap-4 p-4 rounded-xl border border-border bg-slate-50/50">
               <div className="text-[11px] uppercase font-bold text-olive/60 tracking-wider">
                 Cài đặt xuất lịch
@@ -254,9 +308,7 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
 
               <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-ink">
-                    Số năm muốn xuất
-                  </label>
+                  <label className="text-sm font-medium text-ink">Số năm muốn xuất</label>
                   <span className="text-lg font-bold text-accent w-8 text-right">{yearCount}</span>
                 </div>
                 <input
@@ -272,15 +324,14 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
                   <span>30 năm</span>
                 </div>
                 <div className="mt-1 text-center text-xs text-olive/70 bg-white border border-border rounded-lg py-2 px-3">
-                  Sẽ xuất sự kiện cho năm{' '}
-                  <span className="font-bold text-accent">{startYear}</span>
+                  Năm <span className="font-bold text-accent">{startYear}</span>
                   {' '}→{' '}
                   <span className="font-bold text-accent">{endYear}</span>
-                  {' '}({yearCount * events.length} mục)
+                  {' '}· <span className="font-bold text-accent">{totalItems} mục</span>
+                  {' '}({allExportEvents.length} sự kiện × {yearCount} năm)
                 </div>
               </div>
 
-              {/* Post-export feedback */}
               {exportResult && (
                 <div className="flex flex-col gap-2 mt-1">
                   <div className="flex items-center gap-2 text-sm font-bold text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
@@ -322,7 +373,7 @@ export function LunarEventModal({ events, onAddEvent, onDeleteEvent, onUpdateEve
           </p>
           <button
             onClick={handleExport}
-            disabled={events.length === 0}
+            disabled={allExportEvents.length === 0}
             className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white rounded-xl font-bold text-sm hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 shrink-0 ml-auto"
           >
             <Download size={16} />
