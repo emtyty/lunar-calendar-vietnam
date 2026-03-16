@@ -1,5 +1,5 @@
 import { LunarCalendar, CHI } from '@dqcai/vn-lunar';
-import { LunarInfo, AuspiciousDate } from '../types';
+import { LunarInfo, AuspiciousDate, UpcomingEvent } from '../types';
 
 export { LunarCalendar, CHI };
 
@@ -192,4 +192,71 @@ export function findBestDates(activityKey: string, monthsToScan = 3): Auspicious
   }
 
   return results;
+}
+
+/**
+ * Scans forward from today and returns up to `maxCount` upcoming lunar/solar
+ * holiday events within `daysToScan` days (inclusive of today).
+ */
+export function getUpcomingEvents(maxCount = 10, daysToScan = 180): UpcomingEvent[] {
+  const results: UpcomingEvent[] = [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const cursor = new Date(today);
+
+  for (let i = 0; i < daysToScan && results.length < maxCount; i++) {
+    const d = cursor.getDate();
+    const m = cursor.getMonth() + 1;
+    const daysUntil = i;
+
+    const solarKey = `${d}-${m}`;
+    if (SOLAR_HOLIDAYS[solarKey]) {
+      results.push({
+        solarDate: new Date(cursor),
+        title: SOLAR_HOLIDAYS[solarKey],
+        source: 'solar',
+        daysUntil,
+      });
+      if (results.length >= maxCount) break;
+    }
+
+    const lunar = LunarCalendar.fromSolar(d, m, cursor.getFullYear());
+    const ld = lunar.lunarDate.day;
+    const lm = Math.abs(lunar.lunarDate.month);
+    const lunarKey = `${ld}-${lm}`;
+    if (VIETNAMESE_HOLIDAYS[lunarKey]) {
+      results.push({
+        solarDate: new Date(cursor),
+        title: VIETNAMESE_HOLIDAYS[lunarKey],
+        lunarDay: ld,
+        lunarMonth: lm,
+        source: 'lunar',
+        daysUntil,
+      });
+    } else if (ld === 1 && lm !== 1 && results.length < maxCount) {
+      // Mồng 1 (new moon) — skip if already a named holiday or lunar 1/1
+      results.push({
+        solarDate: new Date(cursor),
+        title: `Mồng 1 tháng ${lm}`,
+        lunarDay: ld,
+        lunarMonth: lm,
+        source: 'lunar',
+        daysUntil,
+      });
+    } else if (ld === 15 && lm !== 1 && results.length < maxCount) {
+      // Ngày rằm (full moon) — skip if already a named holiday or lunar 15/1
+      results.push({
+        solarDate: new Date(cursor),
+        title: `Ngày rằm tháng ${lm}`,
+        lunarDay: ld,
+        lunarMonth: lm,
+        source: 'lunar',
+        daysUntil,
+      });
+    }
+
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return results.slice(0, maxCount);
 }

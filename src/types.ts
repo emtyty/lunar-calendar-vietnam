@@ -50,3 +50,12 @@ export interface LunarEvent {
   isLeapMonth: boolean;
   createdAt: number;
 }
+
+export interface UpcomingEvent {
+  solarDate: Date;
+  title: string;
+  lunarDay?: number;
+  lunarMonth?: number;
+  source: 'lunar' | 'solar';
+  daysUntil: number;
+}
