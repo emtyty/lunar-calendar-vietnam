@@ -97,10 +97,10 @@ export function CalendarView({
               <ChevronRight size={18} />
             </button>
           </div>
-          <h2 className="text-base md:text-xl font-bold text-gray-800">
+          <h2 className="hidden md:block text-xl font-bold text-gray-800">
             Tháng {format(currentDate, 'MM, yyyy')}
           </h2>
-          <div className="flex items-center gap-1.5 bg-gray-50 p-1 rounded-lg border border-gray-200">
+          <div className="flex items-center gap-1 bg-gray-50 p-1 rounded-lg border border-gray-200">
             <select
               value={currentDate.getMonth()}
               onChange={e => {
@@ -108,7 +108,7 @@ export function CalendarView({
                 next.setMonth(+e.target.value);
                 onCurrentDateChange(next);
               }}
-              className="bg-transparent border-none text-sm font-semibold px-2 py-1 focus:ring-0 cursor-pointer"
+              className="bg-transparent border-none text-xs md:text-sm font-semibold px-1 md:px-2 py-1 focus:ring-0 cursor-pointer"
             >
               {Array.from({ length: 12 }, (_, i) => (
                 <option key={i} value={i}>Tháng {i + 1}</option>
@@ -121,7 +121,7 @@ export function CalendarView({
                 next.setFullYear(+e.target.value);
                 onCurrentDateChange(next);
               }}
-              className="bg-transparent border-none text-sm font-semibold px-2 py-1 focus:ring-0 cursor-pointer"
+              className="bg-transparent border-none text-xs md:text-sm font-semibold px-1 md:px-2 py-1 focus:ring-0 cursor-pointer"
             >
               {Array.from({ length: 200 }, (_, i) => {
                 const y = 1900 + i;
@@ -132,39 +132,39 @@ export function CalendarView({
         </div>
 
         {/* Right side: Hôm nay + actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
           <button
             onClick={() => {
               const today = new Date();
               onCurrentDateChange(today);
               onSelectedDateChange(today);
             }}
-            className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-semibold hover:bg-gray-50 transition-colors"
+            className="px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-xs md:text-sm font-semibold hover:bg-gray-50 transition-colors"
           >
             Hôm nay
           </button>
           <button
             onClick={onOpenQuickPicker}
-            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-xs md:text-sm font-semibold hover:bg-blue-50 transition-colors"
             title="Xem nhanh"
           >
-            <CalendarIcon size={14} />
+            <CalendarIcon size={13} />
             <span className="hidden sm:inline">Xem nhanh</span>
           </button>
           <button
             onClick={onOpenAuspiciousPicker}
-            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-xs md:text-sm font-semibold hover:bg-blue-50 transition-colors"
             title="Ngày tốt"
           >
-            <Search size={14} />
+            <Search size={13} />
             <span className="hidden sm:inline">Ngày tốt</span>
           </button>
           <button
             onClick={onOpenLunarEventModal}
-            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs md:text-sm font-semibold hover:bg-gray-50 transition-colors"
             title="Xuất lịch"
           >
-            <Download size={14} />
+            <Download size={13} />
             <span className="hidden sm:inline">Xuất lịch</span>
           </button>
         </div>
