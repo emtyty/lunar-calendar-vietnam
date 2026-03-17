@@ -118,7 +118,7 @@ export default function App() {
 
       <NavSidebar activeTab={activeTab} onTabChange={handleTabChange} />
 
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex-1 overflow-hidden flex flex-col pb-14 md:pb-0">
         {activeTab === 'today' && (
           <TodayView
             today={selectedDate}
@@ -170,7 +170,7 @@ export default function App() {
 
       {/* Footer (About link) — shown only on Today and Events views */}
       {activeTab !== 'calendar' && (
-        <div className="fixed bottom-4 right-6 z-20">
+        <div className="fixed bottom-[3.75rem] md:bottom-4 right-6 z-20">
           <button
             onClick={() => setIsAboutOpen(true)}
             className="text-xs font-semibold text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"

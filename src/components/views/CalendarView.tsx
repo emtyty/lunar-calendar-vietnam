@@ -75,12 +75,12 @@ export function CalendarView({
   const selectedZodiacClash = zodiacClashForDay(selectedLunarInfo);
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden">
+    <div className="flex flex-col bg-white overflow-y-auto flex-1 md:h-full md:overflow-hidden">
 
       {/* Header */}
-      <header className="px-5 py-3 flex items-center justify-between gap-3 border-b border-border bg-white shrink-0 flex-wrap">
+      <header className="px-3 md:px-5 py-3 flex items-center justify-between gap-2 md:gap-3 border-b border-border bg-white shrink-0 flex-wrap sticky top-0 z-10">
         {/* Month navigation */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3 flex-wrap">
           <div className="flex items-center gap-0.5">
             <button
               onClick={() => onCurrentDateChange(subMonths(currentDate, 1))}
@@ -97,7 +97,7 @@ export function CalendarView({
               <ChevronRight size={18} />
             </button>
           </div>
-          <h2 className="text-xl font-bold text-gray-800">
+          <h2 className="text-base md:text-xl font-bold text-gray-800">
             Tháng {format(currentDate, 'MM, yyyy')}
           </h2>
           <div className="flex items-center gap-1.5 bg-gray-50 p-1 rounded-lg border border-gray-200">
@@ -145,36 +145,39 @@ export function CalendarView({
           </button>
           <button
             onClick={onOpenQuickPicker}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            title="Xem nhanh"
           >
             <CalendarIcon size={14} />
-            Xem nhanh
+            <span className="hidden sm:inline">Xem nhanh</span>
           </button>
           <button
             onClick={onOpenAuspiciousPicker}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-sm font-semibold hover:bg-blue-50 transition-colors"
+            title="Ngày tốt"
           >
             <Search size={14} />
-            Ngày tốt
+            <span className="hidden sm:inline">Ngày tốt</span>
           </button>
           <button
             onClick={onOpenLunarEventModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-1.5 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
+            title="Xuất lịch"
           >
             <Download size={14} />
-            Xuất lịch
+            <span className="hidden sm:inline">Xuất lịch</span>
           </button>
         </div>
       </header>
 
       {/* Main area: calendar + detail panel */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row md:flex-1 md:overflow-hidden">
 
         {/* Calendar grid */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex flex-col md:flex-1 md:overflow-hidden">
           {/* Week-day header */}
           <div className="calendar-grid border-none bg-white shrink-0">
-            <div className="py-2 text-center text-[10px] font-bold text-olive/40 border-b border-border bg-slate-50">
+            <div className="hidden md:flex py-2 text-center text-[10px] font-bold text-olive/40 border-b border-border bg-slate-50 items-center justify-center">
               W
             </div>
             {WEEK_DAYS.map(day => (
@@ -191,7 +194,7 @@ export function CalendarView({
           </div>
 
           {/* Day cells */}
-          <div className="calendar-grid flex-1 overflow-y-auto no-scrollbar">
+          <div className="calendar-grid md:flex-1 md:overflow-y-auto no-scrollbar">
             {Array.from({ length: Math.ceil(calendarDays.length / 7) }, (_, weekIdx) => {
               const week       = calendarDays.slice(weekIdx * 7, weekIdx * 7 + 7);
               const weekNumber = getWeek(week[0], { weekStartsOn: 1, locale: vi });
@@ -282,7 +285,7 @@ export function CalendarView({
         </div>
 
         {/* Detail panel (right) */}
-        <aside className="w-72 shrink-0 border-l border-border bg-white overflow-y-auto no-scrollbar flex flex-col gap-5 p-5">
+        <aside className="w-full md:w-72 md:shrink-0 border-t md:border-t-0 md:border-l border-border bg-white md:overflow-y-auto no-scrollbar flex flex-col gap-5 p-5">
 
           {/* Selected date header */}
           <div>

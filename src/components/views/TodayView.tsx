@@ -68,7 +68,7 @@ export function TodayView({
       {/* Blue header background */}
       <div className="absolute top-0 left-0 right-0 h-[220px] z-0" style={{ backgroundColor: '#124F8B' }} />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 pt-8 pb-20">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 md:px-6 pt-8 pb-20">
         {/* Title */}
         <h1
           className="text-white text-3xl font-extrabold text-center mb-8"
@@ -78,7 +78,7 @@ export function TodayView({
         </h1>
 
         {/* Main info cards */}
-        <div className="flex gap-4 items-stretch mb-5">
+        <div className="flex flex-col md:flex-row gap-4 items-stretch mb-5">
           {/* Date card with prev/next navigation */}
           <div className="flex-1 flex gap-2 items-stretch">
             <button
@@ -91,17 +91,17 @@ export function TodayView({
 
             {/* Date card */}
             <div
-              className="flex-1 rounded-2xl shadow-sm p-6 flex border border-amber-100"
+              className="flex-1 rounded-2xl shadow-sm p-4 md:p-6 flex border border-amber-100"
               style={{ backgroundColor: '#fff8e7' }}
             >
             {/* Solar */}
-            <div className="flex-1 text-center pr-6 border-r border-amber-200">
+            <div className="flex-1 text-center pr-3 md:pr-6 border-r border-amber-200">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Sun size={15} className="text-amber-500 fill-amber-500" />
                 <span className="text-[11px] font-semibold text-gray-600 tracking-widest uppercase">Dương lịch</span>
               </div>
               <div
-                className="text-[76px] leading-none font-bold mb-2 tracking-tighter"
+                className="text-[52px] md:text-[76px] leading-none font-bold mb-2 tracking-tighter"
                 style={{ color: '#1671C6' }}
               >
                 {format(today, 'd')}
@@ -124,13 +124,13 @@ export function TodayView({
             </div>
 
             {/* Lunar */}
-            <div className="flex-1 text-center pl-6 flex flex-col items-center justify-center">
+            <div className="flex-1 text-center pl-3 md:pl-6 flex flex-col items-center justify-center">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Moon size={15} className="text-[#1671C6] fill-[#1671C6]" />
                 <span className="text-[11px] font-semibold text-gray-600 tracking-widest uppercase">Âm lịch</span>
               </div>
               <div
-                className="text-[76px] leading-none font-bold mb-2 tracking-tighter"
+                className="text-[52px] md:text-[76px] leading-none font-bold mb-2 tracking-tighter"
                 style={{ color: '#1671C6' }}
               >
                 {lunarInfo.lunarDay}
@@ -163,7 +163,7 @@ export function TodayView({
 
           {/* Can Chi zodiac card */}
           <div
-            className="w-[270px] rounded-2xl shadow-sm p-5 border border-blue-100 relative shrink-0"
+            className="w-full md:w-[270px] md:shrink-0 rounded-2xl shadow-sm p-5 border border-blue-100 relative"
             style={{ backgroundColor: '#EBF3FC' }}
           >
             {/* Decorative vertical line */}

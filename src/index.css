@@ -33,6 +33,16 @@
       min-height: 100%;
     }
   }
+
+  @media (max-width: 767px) {
+    /* Remove the week-number column on mobile */
+    .calendar-grid {
+      grid-template-columns: repeat(7, 1fr);
+    }
+    .week-cell {
+      display: none;
+    }
+  }
   
   body {
     @apply bg-paper text-ink font-sans antialiased;
