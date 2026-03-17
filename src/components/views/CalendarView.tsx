@@ -78,7 +78,7 @@ export function CalendarView({
     <div className="flex flex-col bg-white overflow-y-auto flex-1 md:h-full md:overflow-hidden">
 
       {/* Header */}
-      <header className="px-3 md:px-5 py-3 flex items-center justify-between gap-2 md:gap-3 border-b border-border bg-white shrink-0 flex-wrap sticky top-0 z-10">
+      <header className="px-3 md:px-5 py-2 md:py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-3 border-b border-border bg-white shrink-0 sticky top-0 z-10">
         {/* Month navigation */}
         <div className="flex items-center gap-2 md:gap-3 flex-wrap">
           <div className="flex items-center gap-0.5">
@@ -139,33 +139,33 @@ export function CalendarView({
               onCurrentDateChange(today);
               onSelectedDateChange(today);
             }}
-            className="px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-xs md:text-sm font-semibold hover:bg-gray-50 transition-colors"
+            className="flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-[11px] md:text-sm font-semibold hover:bg-gray-50 transition-colors"
           >
             Hôm nay
           </button>
           <button
             onClick={onOpenQuickPicker}
-            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-xs md:text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-[11px] md:text-sm font-semibold hover:bg-blue-50 transition-colors"
             title="Xem nhanh"
           >
-            <CalendarIcon size={13} />
-            <span className="hidden sm:inline">Xem nhanh</span>
+            <CalendarIcon size={12} />
+            <span>Xem nhanh</span>
           </button>
           <button
             onClick={onOpenAuspiciousPicker}
-            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-xs md:text-sm font-semibold hover:bg-blue-50 transition-colors"
+            className="flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-[#1671C6] text-[#1671C6] text-[11px] md:text-sm font-semibold hover:bg-blue-50 transition-colors"
             title="Ngày tốt"
           >
-            <Search size={13} />
-            <span className="hidden sm:inline">Ngày tốt</span>
+            <Search size={12} />
+            <span>Ngày tốt</span>
           </button>
           <button
             onClick={onOpenLunarEventModal}
-            className="flex items-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-xs md:text-sm font-semibold hover:bg-gray-50 transition-colors"
+            className="flex-1 md:flex-none whitespace-nowrap flex items-center justify-center gap-1 px-2 md:px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 text-[11px] md:text-sm font-semibold hover:bg-gray-50 transition-colors"
             title="Xuất lịch"
           >
-            <Download size={13} />
-            <span className="hidden sm:inline">Xuất lịch</span>
+            <Download size={12} />
+            <span>Xuất lịch</span>
           </button>
         </div>
       </header>

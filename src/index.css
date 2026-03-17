@@ -34,16 +34,6 @@
     }
   }
 
-  @media (max-width: 767px) {
-    /* Remove the week-number column on mobile */
-    .calendar-grid {
-      grid-template-columns: repeat(7, 1fr);
-    }
-    .week-cell {
-      display: none;
-    }
-  }
-  
   body {
     @apply bg-paper text-ink font-sans antialiased;
   }
@@ -106,4 +96,14 @@
 
 .day-cell.other-month {
   @apply opacity-30;
+}
+
+/* Hide week-number column on mobile — must be outside @layer so it wins over .week-cell above */
+@media (max-width: 767px) {
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .week-cell {
+    display: none;
+  }
 }
