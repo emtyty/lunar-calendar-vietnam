@@ -126,9 +126,10 @@ export function getLunarInfo(date: Date): LunarInfo {
     lunarMonth:   lunar.lunarDate.month,
     lunarYear:    lunar.lunarDate.year,
     isLeap:       lunar.lunarDate.leap,
-    canChiDay:    lunar.dayCanChi,
-    canChiMonth:  lunar.monthCanChi,
-    canChiYear:   lunar.yearCanChi,
+    // @dqcai/vn-lunar has a typo: "Bình" instead of "Bính" (丙) in its CAN array
+    canChiDay:    lunar.dayCanChi.replace(/^Bình /, 'Bính '),
+    canChiMonth:  lunar.monthCanChi.replace(/^Bình /, 'Bính '),
+    canChiYear:   lunar.yearCanChi.replace(/^Bình /, 'Bính '),
     tietKhi:      'Đang cập nhật',
     gioHoangDao,
     stars:        [],
